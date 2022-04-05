@@ -16,36 +16,24 @@ import requests
 import requests.auth
 from seleniumwire import webdriver
 import warnings
-from datetime import datetime
 from time import sleep
 from liaison import *
 warnings.filterwarnings('ignore')
 
 
 
-now = datetime.now()
-s1 = now.strftime("%d/%m/%Y, %H:%M:%S")
-
-
-def random(list1 = [3, 4, 5,6]):
-    a = random.choice(list1)
-    y = random.choice(list1)
-    z = random.choice(list1)
-
-
-
 
 def tres_bien_shop():
+                #return the current Thread object which corresponds to the caller's thread of control
                 t = threading.current_thread()
 
-
-                ua = UserAgent()
-                user_agent = ua.chrome
+        
 
                 fileObject = open("webscraping.json", "r")
                 jsonContent = fileObject.read()
                 List = json.loads(jsonContent)
 
+                #choose a proxy in the text file if the user want a proxy
                 if List["proxyless"] == "no":
 
                     choicefile = open('proxy.txt', 'r')
@@ -55,9 +43,21 @@ def tres_bien_shop():
                     choice = random.choice(lineliste)
                 else:
                     choice = ""
+                    
+                    
+                #creat a new fingerprint for the chromewebdriver to be undetected with several tasks    
+                
+                #Rotating the useragent
+                
+                ua = UserAgent()
+                user_agent = ua.chrome
 
+                #allows the chromdriver to look like a lambda and non-automatic internet browser
                 options = webdriver.ChromeOptions()
 
+                
+                #showing or not the interface of the chromedriver
+                #Note: if your chromedriver is in headless mode, your task will be faster and you have less chance to be detected as a robot
                 if List["headless"] == "no":
                     pass
                 else:
@@ -77,6 +77,8 @@ def tres_bien_shop():
                 options.add_experimental_option("useAutomationExtension", False)
                 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 
+                
+                #creat a new fingerprint for the chromewebdriver to be undetected with several tasks and to look like a humain user
                 headers = {
                     'pragma': 'no-cache',
                     'cache-control': 'no-cache',
@@ -99,6 +101,7 @@ def tres_bien_shop():
 
                 }
 
+                #enter the path of your csv file
                 with open(".csv", 'r') as csv_file:
                     csv_reader = reader(csv_file)
                     list_of_rows = list(csv_reader)
@@ -110,19 +113,20 @@ def tres_bien_shop():
                     y = [2, 3, 4, 5, 6]
 
 
-                    a = random.choice(list1)
-
-                    driver = webdriver.Chrome(options=options)
-
+                   
                     try:
 
                         row_number = s
 
-
+                        #open the chromedriver navigator
+                        driver = webdriver.Chrome(options=options)
+                        
+                        #search the url in the navigator
                         url = List['url']
 
                         driver.get(url)
 
+                        #Change the property value of the navigator for webdriver to undefined
                         script = '''
                                                                                             Object.defineProperty(navigator, 'webdriver', {
                                                                                                 get: () => undefined
@@ -131,14 +135,17 @@ def tres_bien_shop():
                         driver.execute_script(script)
 
                         try:
+                            #send all the information about the fingerprint of the user in a request session
+                            #Note:proxy must have this format: username:password@ip:port
+                            
                             s = requests.Session()
                             header = s.get(url, headers=headers,proxies={'http': f'http://' + choice, 'https': f'http://' + choice}, verify=False)
                         except:
                             ("header doesn't work")
 
 
+                        #wait 15 until the new page is loaded
                         driver.set_page_load_timeout(15)
-
 
 
                         print(Fore.GREEN + str(s1) + "    " + "start task[" + str(row_number) + "]")
@@ -151,21 +158,29 @@ def tres_bien_shop():
                     pass
                 else:
                     try:
+                        a = random.choice(list1)
                         zs = random.choice(z)
                         ys = random.choice(z)
 
+                        #Wait that the element is clickable during 15 if the time is up the chromedriver will show a error
+                       
                         wait = WebDriverWait(driver, 15)
                         wait.until(expected_conditions.element_to_be_clickable(
                             (By.XPATH, '/html/body/div[3]/header/div/div/div/a[1]/span')))
 
-
+                        #search the fullxpath of the element and click on it but not in the center of the element to bypass bot protection
+                        
                         search_xpath = driver.find_element(By.XPATH, '/html/body/div[3]/header/div/div/div/a[1]/span')
                         action = webdriver.common.action_chains.ActionChains(driver)
                         action.move_to_element_with_offset(search_xpath, ys, zs)
                         action.click()
                         action.perform()
 
+                        #Do nothing during "a" secondes
+                        #Note: we use a random number of secondes to look more like a humain
+                        
                         sleep(a)
+                        
                     except:
                         print(Fore.RED + "can't find enter button")
                         r = "no"
@@ -176,16 +191,19 @@ def tres_bien_shop():
 
                     a = random.choice(list1)
 
-                    sneaker_reference = List['sneakers reference']
-
 
                     try:
+                        
+                        #Wait that the element is clickable during 15 if the time is up the chromedriver will show a error
+                        
                         wait = WebDriverWait(driver, 15)
                         wait.until(expected_conditions.element_to_be_clickable(
                             (By.XPATH, '//*[@id="search"]')))
 
+                        #search the xpath of the element and send a value to the element
+                        
                         sneakers_element = driver.find_element(By.XPATH, '//*[@id="search"]').send_keys(sneaker_reference)
-                        sneakers_element.send_keys(sneaker_reference)
+                        sneakers_element.send_keys(List['sneakers reference'])
 
                         sleep(a+3)
 
@@ -270,8 +288,9 @@ def tres_bien_shop():
                         fullname_element = driver.find_element(By.XPATH, '//*[@id="fullname"]')
                         fullname_element.send_keys(value1+" "+value2)
                         sleep(a)
+                        
+                        #scroll to the element
                         driver.execute_script("arguments[0].scrollIntoView();", fullname_element)
-
                         sleep(a)
 
                     except:
@@ -425,9 +444,10 @@ def tres_bien_shop():
                     col_number = 23
                     value = list_of_rows[row_number - 1][col_number - 1]
 
-                    a = random.choice(list1)
+                    
 
                     try:
+                        a = random.choice(list1)
                         zs = random.choice(z)
                         ys = random.choice(y)
 
@@ -505,18 +525,18 @@ def tres_bien_shop():
                 else:
                     try:
 
-
-                        fileObject1 = open("general setting.json", "r")
-                        jsonContent1 = fileObject1.read()
-                        List1 = json.loads(jsonContent1)
-
-                        API_KEY = List1['2captcha API']
+                        #bypass captcha
+                        
+                        #your 2captcha API key
+                        API_KEY = List['2captcha API']
                         data_sitekey = '6LfjzmQUAAAAAJxTOcx3vYq3hroeYczGfDPU-NlX'
                         page_url = List['url']
 
+                        #send a request to 2captcha service to solve the captcha and send back the solution
                         u1 = f"https://2captcha.com/in.php?key={API_KEY}&method=userrecaptcha&googlekey={data_sitekey}&pageurl={page_url}&json=1&invisible=1"
                         r1 = requests.get(u1)
 
+                        #wait until the captcha is solved
                         rid = r1.json().get("request")
                         u2 = f"https://2captcha.com/res.php?key={API_KEY}&action=get&id={int(rid)}&json=1"
                         sleep(5)
@@ -527,6 +547,8 @@ def tres_bien_shop():
                                 form_tokon = r2.json().get("request")
                                 break
                             sleep(5)
+                            
+                        #inject the solution in the g-recaptcha-response html to solve the captcha
                         write_tokon_js = f'document.getElementById("g-recaptcha-response").innerHTML="{form_tokon}";'
                         driver.execute_script(write_tokon_js)
                         print("captcha solve...")
@@ -594,21 +616,29 @@ jsonContent = fileObject.read()
 List = json.loads(jsonContent)
 
 k = "yes"
+
+#choose the line where we will start extracting the information from the csv
 if List["custom_start_task"] == "yes":
     s = List["specific_line_start"]
 else:
     s = 1
+    
+    
 running = 0
 threads = []
 a = 0
-while True:
+#looping until x will egal to False
+x=True
+while x:
 
+    #enter the path of your csv file
     with open(".csv", 'r') as csv_file:
         csv_reader = reader(csv_file)
         list_of_rows = list(csv_reader)
         # (list_of_rows)
 
 
+        #Start to pick the information in the csv
         if List["paypal_email"] == "paypal":
             try:
                 row_number = s
@@ -616,6 +646,8 @@ while True:
                 value = list_of_rows[row_number - 1][col_number - 1]
             except IndexError:
 
+                #close all the threads if that doesn't work and return to the main.py script
+                x=False
                 t.join()
                 t.do_run = False
                 print(Fore.WHITE + "program is over")
@@ -629,6 +661,7 @@ while True:
                 value = list_of_rows[row_number - 1][col_number - 1]
             except IndexError:
 
+                x=False
                 t.join()
                 t.do_run = False
                 print(Fore.WHITE + "program is over")
@@ -636,9 +669,11 @@ while True:
                 sleep(5)
                 dict[3]()
 
+        #close all the threads if we have crossed the line where we must stop in the csv and choose to have a custom finish task 
         if List["custom_finish_task"] == "yes":
             if (int(s) > List["specific_line_finish"]):
 
+                x=False
                 t.join()
                 t.do_run = False
                 print(Fore.WHITE + "program is over")
@@ -648,10 +683,12 @@ while True:
             else:
                 pass
 
+        #close all the threads if we have finish to read all the lines in the csv and choose to not have a custom finish task
         if List["custom_finish_task"] == "no":
             results = pd.read_csv('.csv', encoding='unicode_escape')
 
             if (int(s) == int(len(results))):
+                x=False
                 t.join()
                 t.do_run = False
                 print(Fore.WHITE + "program is over")
@@ -661,6 +698,8 @@ while True:
             else:
                 pass
 
+        #when a thread is over, start a new one if the number of maximum tasks isn't reached 
+        #Or if the task isn't alive, we reduce the running number in order to get new tasks
         if int(running) < int(List["number_of_task"]):
 
             t = threading.Thread(target=tres_bien_shop)
