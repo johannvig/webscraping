@@ -14,15 +14,10 @@ import requests
 import requests.auth
 from seleniumwire import webdriver
 import warnings
-from datetime import datetime
 from time import sleep
 from liaison import *
 warnings.filterwarnings('ignore')
 
-
-
-now = datetime.now()
-s1 = now.strftime("%d/%m/%Y, %H:%M:%S")
 
 
 
@@ -31,14 +26,12 @@ def ballzy_shop():
                 t = threading.current_thread()
 
 
-                ua = UserAgent()
-                user_agent = ua.chrome
 
                 fileObject = open("webscraping.json", "r")
                 jsonContent = fileObject.read()
                 List = json.loads(jsonContent)
 
-
+                #choose a proxy in the text file if the user want a proxy
                 if List["proxyless"] == "no":
 
                     choicefile = open('proxy.txt', 'r')
@@ -49,14 +42,24 @@ def ballzy_shop():
                 else:
                     choice = ""
 
+                    
+                #creat a new fingerprint for the chromewebdriver to be undetected with several tasks    
+                
+                #Rotating the useragent
+                ua = UserAgent()
+                user_agent = ua.chrome
+                
+                #allows the chromdriver to look like a lambda and non-automatic internet browser
                 options = webdriver.ChromeOptions()
 
+                #showing or not the interface of the chromedriver
+                #Note: if your chromedriver is in headless mode, your task will be faster and you have less chance to be detected as a robot
+                
                 if List["headless"] == "no":
                     pass
                 else:
                     options.add_argument('headless')
-
-
+                    
                 options.add_argument(f'--disable-dev-shm-usage')
                 options.add_argument("--start-maximized")
                 options.add_argument(f'--disable-gpu')
@@ -70,6 +73,7 @@ def ballzy_shop():
                 options.add_experimental_option("useAutomationExtension", False)
                 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 
+                #creat a new fingerprint for the chromewebdriver to be undetected with several tasks and to look like a humain user
                 headers = {
                     'pragma': 'no-cache',
                     'cache-control': 'no-cache',
@@ -92,6 +96,7 @@ def ballzy_shop():
 
                 }
 
+                #enter the path of your csv file
                 with open(".csv", 'r') as csv_file:
                     csv_reader = reader(csv_file)
                     list_of_rows = list(csv_reader)
@@ -99,17 +104,21 @@ def ballzy_shop():
 
                     r = "yes"
                     list1 = [3, 4, 5]
-                    z = [2, 3, 4, 5, 6]
-                    y = [2, 3, 4, 5, 6]
 
                     a = random.choice(list1)
-                    driver = webdriver.Chrome(options=options)
+                    
+                    
                     try:
                         row_number = s
-
-
+                        
+                        #open the chromedriver navigator
+                        driver = webdriver.Chrome(options=options)
+                        
+                        #search the url in the navigator
                         driver.get(List['url'])
 
+                        
+                        #Change the property value of the navigator for webdriver to undefined
                         script = '''
                                                                                                             Object.defineProperty(navigator, 'webdriver', {
                                                                                                                 get: () => undefined
@@ -118,12 +127,16 @@ def ballzy_shop():
                         driver.execute_script(script)
 
                         try:
+                            #send all the information about the fingerprint of the user in a request session
+                            #Note:proxy must have this format: username:password@ip:port
+                            
                             header = requests.Session()
                             header.get(List['url'], headers=headers,proxies={'http': f'http://' + choice, 'https': f'http://' + choice}, verify=False)
+                            
                         except:
                             ("header doesn't fully work")
 
-
+                        #wait 15 until the new page is loaded
                         driver.set_page_load_timeout(15)
 
 
@@ -144,21 +157,21 @@ def ballzy_shop():
 
                     try:
 
-
+                        #search the fullxpath of the element and click on it
                         size_element = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/div[2]/div[2]/form/select')
                         size_element.click()
                         sleep(a)
 
-
+                        #search the fullxpath of the element and send a value to the element
                         size_element = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/div[2]/div[2]/form/select')
                         size_element.send_keys(value_size)
+                        
+                        #Do nothing during "a" secondes
+                        #Note: we use a random number of secondes to look more like a humain
                         sleep(a)
 
                     except:
-                        p = "can't find size"
-                        print(Fore.RED + p)
-
-                        sleep(2)
+                        print(Fore.RED + "can't find size")
                         r = "no"
 
                 if r == "no":
@@ -166,7 +179,7 @@ def ballzy_shop():
                 else:
 
                     try:
-
+                        #search the fullxpath of the element and click on it
                         enter_element = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/div[2]/div[2]/form/button')
                         enter_element.click()
                         sleep(a+8)
@@ -183,20 +196,19 @@ def ballzy_shop():
                     try:
 
                         a = random.choice(list1)
-                        zs = random.choice(z)
-                        ys = random.choice(y)
+
 
                         gender = ["mr", "mrs"]
                         random_gender = random.choice(gender)
 
                         if (random_gender == "mr"):
-
+                            #search the xpath of the element and click on it
                             mr_xpath = driver.find_element(By.XPATH, '//*[@id="participant_gender1"]')
                             mr_xpath.click()
 
 
                         else:
-
+                            #search the xpath of the element and click on it
                             mrs_xpath = driver.find_element(By.XPATH, '//*[@id="participant_gender2"]')
                             mrs_xpath.click()
 
@@ -221,7 +233,7 @@ def ballzy_shop():
                         email= list_of_rows[row_number - 1][col_number - 1]
 
                     try:
-
+                        #search the xpath of the element and send a value to the element
                         email_element = driver.find_element(By.XPATH,'//*[@id="collapseOne"]/div/div[2]/input')
                         email_element.send_keys(email)
                         sleep(a)
@@ -241,11 +253,12 @@ def ballzy_shop():
                     a = random.choice(list1)
 
                     try:
-
+                        #search the xpath of the element and send a value to the element
                         tel_element = driver.find_element(By.XPATH, '//*[@id="collapseOne"]/div/div[3]/input')
                         tel_element.send_keys('+' + prefix_numero + numero)
                         sleep(a)
-
+                        
+                        #scroll to the element
                         driver.execute_script("arguments[0].scrollIntoView();", tel_element)
                         sleep(a)
 
@@ -268,6 +281,7 @@ def ballzy_shop():
                         firstname = list_of_rows[row_number - 1][col_number - 1]
 
                     try:
+                        #search the xpath of the element and send a value to the element
                         firstname_element = driver.find_element(By.XPATH, '//*[@id="collapseOne"]/div/div[4]/input')
                         firstname_element.send_keys(firstname)
                         sleep(a)
@@ -291,6 +305,7 @@ def ballzy_shop():
                         lastname = list_of_rows[row_number - 1][col_number - 1]
 
                     try:
+                        #search the xpath of the element and send a value to the element
                         lastname_element = driver.find_element(By.XPATH, '//*[@id="collapseOne"]/div/div[5]/input')
                         lastname_element.send_keys(lastname)
                         sleep(a)
@@ -494,6 +509,7 @@ def ballzy_shop():
                     a = random.choice(list1)
 
                     try:
+                        #Wait that the element is clickable during 15 if the time is up the chromedriver will show a error 
                         wait = WebDriverWait(driver, 15)
                         wait.until(expected_conditions.element_to_be_clickable(
                             (By.XPATH, '//*[@id="collapseTwo"]/div/div[6]/input')))
@@ -539,16 +555,20 @@ def ballzy_shop():
                     card_number = list_of_rows[row_number - 1][col_number - 1]
 
                     a = random.choice(list1)
-
+                    
+                    #switch to iframe to be able to continue the webscraping
                     driver.switch_to.frame(0)
 
                     try:
+                        #Wait that the element is clickable during 15 if the time is up the chromedriver will show a error
                         wait = WebDriverWait(driver, 15)
                         wait.until(expected_conditions.element_to_be_clickable(
                             (By.XPATH,
                              '/html/body/div/div/div/div/div/form/div[1]/div[1]/div/input')))
                         card_number_button = driver.find_element(By.XPATH,
                                                                  '/html/body/div/div/div/div/div/form/div[1]/div[1]/div/input')
+                        
+                        #scroll to the element
                         driver.execute_script("arguments[0].scrollIntoView();", card_number_button)
                         sleep(a)
 
@@ -589,6 +609,7 @@ def ballzy_shop():
                     a = random.choice(list1)
 
                     try:
+                        #Wait that the element is clickable during 15 if the time is up the chromedriver will show a error
                         wait = WebDriverWait(driver, 15)
                         wait.until(expected_conditions.element_to_be_clickable(
                             (By.XPATH,
@@ -611,6 +632,7 @@ def ballzy_shop():
                     a = random.choice(list1)
 
                     try:
+                        #Wait that the element is clickable during 15 if the time is up the chromedriver will show a error
                         wait = WebDriverWait(driver, 15)
                         wait.until(expected_conditions.element_to_be_clickable(
                             (By.XPATH,
@@ -642,11 +664,10 @@ def ballzy_shop():
                     pass
                 else:
                     try:
-                        zs = random.choice(z)
-                        ys = random.choice(y)
+                       
                         a = random.choice(list1)
 
-
+                        #switch to come out of all the frames and to focus at the page
                         driver.switch_to.default_content()
                         wait = WebDriverWait(driver, 15)
                         wait.until(expected_conditions.element_to_be_clickable(
@@ -657,8 +678,7 @@ def ballzy_shop():
                         enter_xpath.click()
 
                         print(Fore.GREEN + "successfully enter task[" + str(row_number) + "]")
-                        sleep(a)
-                        sleep(5)
+                        sleep(a+5)
 
                     except:
                         p = "can't find enter button"
@@ -688,30 +708,34 @@ jsonContent = fileObject.read()
 List = json.loads(jsonContent)
 
 k = "yes"
+
+#choose the line where we will start extracting the information from the csv
 if List["custom_start_task"] == "yes":
-                    s = List["specific_line_start"]
+     s = List["specific_line_start"]
 else:
-                    s = 1
+     s = 1
 
 running = 0
 threads = []
 a = 0
-
-while True:
-
+#looping until x will egal to False
+x=True
+while x:
+    #enter the path of your csv file
     with open(".csv", 'r') as csv_file:
         csv_reader = reader(csv_file)
         list_of_rows = list(csv_reader)
         # (list_of_rows)
 
-
+        #Start to pick the information in the csv
         if List["paypal_email"] == "paypal":
             try:
                 row_number = s
                 col_number = 2
                 value = list_of_rows[row_number - 1][col_number - 1]
             except IndexError:
-
+                #close all the threads if that doesn't work and return to the main.py script
+                x=False
                 t.join()
                 t.do_run = False
                 print(Fore.WHITE + "program is over")
@@ -724,7 +748,7 @@ while True:
                 col_number = 1
                 value = list_of_rows[row_number - 1][col_number - 1]
             except IndexError:
-
+                x=False
                 t.join()
                 t.do_run = False
                 print(Fore.WHITE + "program is over")
@@ -732,9 +756,11 @@ while True:
                 sleep(5)
                 dict[3]()
 
+                
+        #close all the threads if we have crossed the line where we must stop in the csv and choose to have a custom finish task        
         if List["custom_finish_task"] == "yes":
             if (int(s) > List["specific_line_finish"]):
-
+                x=False
                 t.join()
                 t.do_run = False
                 print(Fore.WHITE + "program is over")
@@ -744,10 +770,12 @@ while True:
             else:
                 pass
 
+        #close all the threads if we have finish to read all the lines in the csv and choose to not have a custom finish task
         if List["custom_finish_task"] == "no":
             results = pd.read_csv('.csv', encoding='unicode_escape')
 
             if (int(s) == int(len(results))):
+                x=False
                 t.join()
                 t.do_run = False
                 print(Fore.WHITE + "program is over")
@@ -757,6 +785,8 @@ while True:
             else:
                 pass
 
+        #when a thread is over, start a new one if the number of maximum tasks isn't reached 
+        #Or if the task isn't alive, we reduce the running number in order to get new tasks
         if int(running) < int(List["number_of_task"]):
 
             t = threading.Thread(target=ballzy_shop)
