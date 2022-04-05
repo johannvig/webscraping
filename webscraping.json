@@ -1,0 +1,28 @@
+{
+    "headless":"yes/no",
+    "proxyless": "yes/no",
+    "url":"",
+  
+    "sneakers reference": "",
+    "size":"",
+    "paypal_email":"",
+    "fake/real firstname":"",
+    "fake/real lastname":"",
+    "fake/real fullname":"",
+    "birthmonth": "",
+    "fake/real address":"",
+    "jig with street type": "",
+    "jig before address":"",
+  
+    "minimum delay":"",
+    "maximum delay":"",
+  
+    "custom_start_task":"yes/no",
+    "custom_finish_task": "yes/no",
+    "specific_line_start":"",
+    "specific_line_finish": "",
+  
+    "number_of_task":"",
+  
+    "2captcha API": ""
+}
