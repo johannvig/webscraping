@@ -22,7 +22,7 @@ warnings.filterwarnings('ignore')
 
 
 def ballzy_shop():
-
+                #return the current Thread object which corresponds to the caller's thread of control
                 t = threading.current_thread()
 
 
