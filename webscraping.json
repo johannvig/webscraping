@@ -1,28 +1,29 @@
 {
-    "headless":"yes/no",
-    "proxyless": "yes/no",
-    "url":"",
-  
-    "sneakers reference": "",
-    "size":"",
-    "paypal_email":"",
-    "fake/real firstname":"",
-    "fake/real lastname":"",
-    "fake/real fullname":"",
-    "birthmonth": "",
-    "fake/real address":"",
-    "jig with street type": "",
-    "jig before address":"",
-  
-    "minimum delay":"",
-    "maximum delay":"",
-  
-    "custom_start_task":"yes/no",
-    "custom_finish_task": "yes/no",
-    "specific_line_start":"",
-    "specific_line_finish": "",
-  
-    "number_of_task":"",
-  
-    "2captcha API": ""
+    "headless": "yes/no",         # Whether to run the browser in headless mode
+    "proxyless": "yes/no",        # Whether to use proxies for requests
+    "url": "",                    # The URL to access for the task
+
+    "sneakers reference": "",     # The reference ID for the sneakers to purchase
+    "size": "",                   # The size of the sneakers to purchase
+    "paypal_email": "",           # The email address for the PayPal account to use
+    "fake/real firstname": "",    # The first name to use for the shipping address
+    "fake/real lastname": "",     # The last name to use for the shipping address
+    "fake/real fullname": "",     # The full name to use for the shipping address
+    "birthmonth": "",             # The birth month to use for the shipping address
+    "fake/real address": "",      # The street address to use for the shipping address
+    "jig with street type": "",   # Whether to "jig" the street type in the address
+    "jig before address": "",     # Whether to "jig" the address before or after the street type
+
+    "minimum delay": "",          # The minimum delay between tasks
+    "maximum delay": "",          # The maximum delay between tasks
+
+    "custom_start_task": "yes/no",      # Whether to use a custom start task
+    "custom_finish_task": "yes/no",     # Whether to use a custom finish task
+    "specific_line_start": "",          # The specific line number to start the task on
+    "specific_line_finish": "",         # The specific line number to end the task on
+
+    "number_of_task": "",         # The total number of tasks to run
+
+    "2captcha API": ""            # The API key for 2captcha service
 }
+
