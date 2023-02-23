@@ -34,5 +34,5 @@ sleep_time : Le temps de pause entre chaque requête, en secondes.
 max_retry : Le nombre maximal de tentatives à effectuer si une requête échoue.
 timeout : Le temps maximal pour attendre qu'une page se charge, en secondes.
 
-#🚨Avertissement
+<h1>🚨Avertissement</h1>
 Le webscraping de sites web sans autorisation peut être illégal. Veuillez vous assurer d'avoir le droit de scraper le site web avant d'utiliser ce programme.
